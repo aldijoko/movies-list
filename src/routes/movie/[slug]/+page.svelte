@@ -1,13 +1,22 @@
 <script>
+	import { fly } from "svelte/transition";
+
+
     export let data
 
     const { movieDetails } = data;
-    console.log(movieDetails)
+    // console.log(movieDetails)
 </script>
 
 <div class="w-full p-5">
-    <h1 class="text-2xl text-gray-500 uppercase">Movie Detail: {movieDetails.title}</h1>
-    <div class="py-10">
+    <div class="flex items-center gap-2">
+        <a href="/">
+            <span class="iconify text-xl text-gray-400" data-icon="material-symbols:arrow-back-ios-rounded"></span>
+        </a>
+        <h1 class="text-2xl text-gray-500 uppercase">Movie Detail: {movieDetails.title}</h1>
+    </div>
+    
+    <div class="py-10" in:fly={{  y:-30, duration: 500 }} out:fly={{ duration: 200}}>
         <div class="w-full rounded-xl">
             <img class="rounded-xl" src={'https://image.tmdb.org/t/p/original' + movieDetails.backdrop_path} alt={movieDetails.title}>
         </div>

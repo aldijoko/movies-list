@@ -1,4 +1,6 @@
 <script>
+    import { goto } from '$app/navigation'
+    import { fly } from 'svelte/transition'
 
     const listCategory = [
         {name: 'Action'},
@@ -9,14 +11,43 @@
         {name: 'Shitty but i love it'},
         {name: 'My Top 100'},
     ]
+
+    let inputValue = ''
+    let active = false;
+    
+    function cancelInactive() {
+        if(inputValue){
+            active = true
+        }else{
+            active = false
+        }
+    }
+    
+    function submitSearch() {
+        goto('/search/' + inputValue)
+    }
 </script>
 
 <div class="w-full h-full flex flex-col justify-between">
     <div class="mt-2 mx-3">
         <h1 class="font-bold text-red-500 text-2xl">Movielist</h1>
-        <div class="h-7 w-full rounded-md border mt-3 mb-3">
-
-        </div>
+        <form class="w-full" on:submit|preventDefault={submitSearch}>
+            <div class="h-8 w-full mt-3 mb-3 flex justify-between border rounded-md py-1 px-1 relative">
+                {#if !active}
+                <label out:fly={{y: -10, duration: 500}} for="search_movie" class="absolute left-3">Search Movie</label>
+                {/if}
+                <input 
+                    type="text" 
+                    class="w-full h-full outline-none focus:outline-none bg-black px-2" 
+                    name="search_movie" 
+                    bind:value={inputValue} 
+                    on:focus={()=> active = true}
+                    on:blur={cancelInactive}>
+                <button>
+                    <span class="iconify text-xl" data-icon="material-symbols:search"></span>
+                </button>
+            </div>
+        </form>
         <div class="w-full border-b border-t py-3">
             <a href="">
                 <div class="w-full flex gap-4 items-center px-2 py-2 is-active">
@@ -78,5 +109,9 @@
 <style lang="postcss">
     .is-active {
         @apply rounded-md bg-gray-600;
+    }
+
+    label {
+
     }
 </style>
